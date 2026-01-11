@@ -1,1 +1,26 @@
-
+{
+  "patients": [
+    { "id": 1, "name": "Ahmed Benali", "age": 45, "service": "Cardiologie" },
+    { "id": 2, "name": "Sara El Amrani", "age": 30, "service": "Pédiatrie" }
+  ],
+  "doctors": [
+    { "id": 1, "name": "Dr Karim Mansouri", "specialty": "Cardiologie" },
+    { "id": 2, "name": "Dr Amina Zahra", "specialty": "Pédiatrie" }
+  ],
+  "appointments": [
+    { "id": 1, "patientId": 1, "doctorId": 1, "date": "2026-01-15" }
+  ],
+  "prescriptions": [
+    {
+      "id": 1,
+      "patientId": 1,
+      "doctorId": 1,
+      "medications": "Aspirine, Paracétamol",
+      "date": "2026-01-15"
+    }
+  ],
+  "services": [
+    { "id": 1, "name": "Cardiologie", "beds": 20 },
+    { "id": 2, "name": "Pédiatrie", "beds": 15 }
+  ]
+}
