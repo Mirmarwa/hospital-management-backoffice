@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Hospital Management System</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Hospital Management System</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
 
 </head>
-<body class="p-4">
+
+<body>
 
 <!-- LOGIN -->
 <div id="loginPage">
@@ -21,108 +29,180 @@
 <!-- APP -->
 <div id="appPage" class="d-none">
 
-  <ul class="nav nav-tabs mb-4">
-  <li class="nav-item"><button class="nav-link active" onclick="show('dashboard')">Dashboard</button></li>
-  <li class="nav-item"><button class="nav-link" onclick="show('patients')">Patients</button></li>
-  <li class="nav-item"><button class="nav-link" onclick="show('doctors')">Médecins</button></li>
-  <li class="nav-item"><button class="nav-link" onclick="show('appointments')">Rendez-vous</button></li>
-  <li class="nav-item"><button class="nav-link" onclick="show('prescriptions')">Prescriptions</button></li>
-<li class="nav-item"><button class="nav-link" onclick="show('services')">Services</button></li>
-
-  <li class="nav-item ms-auto"><button class="btn btn-danger" onclick="logout()">Logout</button></li>
-</ul>
-<!-- DASHBOARD -->
-<div id="dashboard">
-  <div class="row mb-4">
-    <div class="col-md-4"><div class="alert alert-primary">Patients: <b id="statPatients">0</b></div></div>
-    <div class="col-md-4"><div class="alert alert-success">Médecins: <b id="statDoctors">0</b></div></div>
-    <div class="col-md-4"><div class="alert alert-warning">Rendez-vous: <b id="statAppointments">0</b></div></div>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h1>Hospital Management</h1>
+    <button id="btn-dashboard" onclick="show('dashboard')">📊 Dashboard</button>
+    <button id="btn-patients" onclick="show('patients')">👤 Patients</button>
+    <button id="btn-doctors" onclick="show('doctors')">👨‍⚕️ Médecins</button>
+    <button id="btn-appointments" onclick="show('appointments')">📅 Rendez-vous</button>
+    <button id="btn-prescriptions" onclick="show('prescriptions')">💊 Prescriptions</button>
+    <button id="btn-services" onclick="show('services')">🏥 Services</button>
   </div>
 
-  <div class="row">
-    <div class="col-md-6"><canvas id="patientsByService"></canvas></div>
-    <div class="col-md-6"><canvas id="doctorsBySpecialty"></canvas></div>
-    <div class="col-md-6 mt-4"><canvas id="appointmentsByDay"></canvas></div>
-    <div class="col-md-6 mt-4"><canvas id="appointmentsByDoctor"></canvas></div>
-    <div class="col-md-12 mt-4"><canvas id="ageDistribution"></canvas></div>
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+  <!-- ================= DASHBOARD ================= -->
+  <div id="dashboard" class="section">
+
+    <!-- KPI -->
+    <div class="row mb-4 g-3">
+      <div class="col-md-2">
+        <div class="card border-primary">
+          <div class="card-body text-center">
+            <h6>Patients</h6>
+            <h3 id="statPatients">0</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="card border-success">
+          <div class="card-body text-center">
+            <h6>Médecins</h6>
+            <h3 id="statDoctors">0</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="card border-warning">
+          <div class="card-body text-center">
+            <h6>Rendez-vous</h6>
+            <h3 id="statAppointments">0</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="card border-info">
+          <div class="card-body text-center">
+            <h6>Prescriptions</h6>
+            <h3 id="statPrescriptions">0</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="card border-dark">
+          <div class="card-body text-center">
+            <h6>Services</h6>
+            <h3 id="statServices">0</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h6>Patients par service</h6>
+        <canvas id="patientsByService"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h6>Médecins par spécialité</h6>
+        <canvas id="doctorsBySpecialty"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h6>Rendez-vous par date</h6>
+        <canvas id="appointmentsByDay"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h6>Rendez-vous par médecin</h6>
+        <canvas id="appointmentsByDoctor"></canvas>
+      </div>
+
+      <div class="chart-card full">
+        <h6>Répartition des âges</h6>
+        <canvas id="ageDistribution"></canvas>
+      </div>
+    </div>
+
   </div>
-</div>
+  <!-- ================= FIN DASHBOARD ================= -->
 
-
-  <!-- PATIENTS -->
-  <div id="patients">
+  <!-- ================= PATIENTS ================= -->
+  <div id="patients" class="section d-none">
     <h3>Patients</h3>
-    <form onsubmit="savePatient(event)" class="row g-2 mb-3">
+    <form onsubmit="savePatient(event)">
       <input type="hidden" id="patientId">
-      <input id="pName" class="form-control col" placeholder="Nom">
-      <input id="pAge" type="number" class="form-control col" placeholder="Âge">
-      <input id="pService" class="form-control col" placeholder="Service">
-      <button class="btn btn-success col">Save</button>
+      <input id="pName" class="form-control mb-2" placeholder="Nom">
+      <input id="pAge" type="number" class="form-control mb-2" placeholder="Âge">
+      <input id="pService" class="form-control mb-2" placeholder="Service">
+      <button class="btn btn-success">Save</button>
     </form>
-    <table class="table"><tbody id="patientsTable"></tbody></table>
-    <button class="btn btn-outline-success mb-2" onclick="exportPatientsCSV()">
-  Export Patients CSV
-</button>
-
+    <table class="table mt-3">
+      <tbody id="patientsTable"></tbody>
+    </table>
   </div>
 
-  <!-- DOCTORS -->
-  <div id="doctors" class="d-none">
+  <!-- ================= DOCTORS ================= -->
+  <div id="doctors" class="section d-none">
     <h3>Médecins</h3>
-    <form onsubmit="saveDoctor(event)" class="row g-2 mb-3">
+    <form onsubmit="saveDoctor(event)">
       <input type="hidden" id="doctorId">
-      <input id="dName" class="form-control col" placeholder="Nom">
-      <input id="dSpec" class="form-control col" placeholder="Spécialité">
-      <button class="btn btn-success col">Save</button>
+      <input id="dName" class="form-control mb-2" placeholder="Nom">
+      <input id="dSpec" class="form-control mb-2" placeholder="Spécialité">
+      <button class="btn btn-success">Save</button>
     </form>
-    <table class="table"><tbody id="doctorsTable"></tbody></table>
+    <table class="table mt-3">
+      <tbody id="doctorsTable"></tbody>
+    </table>
   </div>
 
-  <!-- APPOINTMENTS -->
-  <div id="appointments" class="d-none">
+  <!-- ================= APPOINTMENTS ================= -->
+  <div id="appointments" class="section d-none">
     <h3>Rendez-vous</h3>
-    <form onsubmit="saveAppointment(event)" class="row g-2 mb-3">
-      <select id="aPatient" class="form-control col"></select>
-      <select id="aDoctor" class="form-control col"></select>
-      <input id="aDate" type="date" class="form-control col">
-      <input id="aTime" type="time" class="form-control col">
-      <button class="btn btn-success col">Save</button>
+    <form onsubmit="saveAppointment(event)">
+      <input type="hidden" id="appointmentId">
+      <select id="aPatient" class="form-control mb-2"></select>
+      <select id="aDoctor" class="form-control mb-2"></select>
+      <input id="aDate" type="date" class="form-control mb-2">
+      <button class="btn btn-success">Save</button>
     </form>
-    <table class="table"><tbody id="appointmentsTable"></tbody></table>
-    <button class="btn btn-outline-danger mb-2" onclick="exportAppointmentsPDF()">
-  Export Rendez-vous PDF
-</button>
+    <table class="table mt-3">
+      <tbody id="appointmentsTable"></tbody>
+    </table>
+  </div>
 
+  <!-- ================= PRESCRIPTIONS ================= -->
+  <div id="prescriptions" class="section d-none">
+    <h3>Prescriptions</h3>
+    <form onsubmit="savePrescription(event)">
+      <input type="hidden" id="prescriptionId">
+      <select id="prPatient" class="form-control mb-2"></select>
+      <select id="prDoctor" class="form-control mb-2"></select>
+      <input id="prMeds" class="form-control mb-2" placeholder="Médicaments">
+      <input id="prDate" type="date" class="form-control mb-2">
+      <button class="btn btn-success">Save</button>
+    </form>
+    <table class="table mt-3">
+      <tbody id="prescriptionsTable"></tbody>
+    </table>
+  </div>
+
+  <!-- ================= SERVICES ================= -->
+  <div id="services" class="section d-none">
+    <h3>Services</h3>
+    <form onsubmit="saveService(event)">
+      <input type="hidden" id="serviceId">
+      <input id="sName" class="form-control mb-2" placeholder="Nom du service">
+      <input id="sBeds" type="number" class="form-control mb-2" placeholder="Lits">
+      <button class="btn btn-success">Save</button>
+    </form>
+    <table class="table mt-3">
+      <tbody id="servicesTable"></tbody>
+    </table>
   </div>
 
 </div>
-<!-- PRESCRIPTIONS -->
-<div id="prescriptions" class="d-none">
-  <h3>Prescriptions</h3>
-  <form onsubmit="savePrescription(event)" class="row g-2 mb-3">
-    <select id="prPatient" class="form-control col"></select>
-    <select id="prDoctor" class="form-control col"></select>
-    <input id="prMeds" class="form-control col" placeholder="Médicaments">
-    <input id="prDate" type="date" class="form-control col">
-    <button class="btn btn-success col">Save</button>
-  </form>
-  <table class="table"><tbody id="prescriptionsTable"></tbody></table>
-</div>
-
-<!-- SERVICES -->
-<div id="services" class="d-none">
-  <h3>Services</h3>
-  <form onsubmit="saveService(event)" class="row g-2 mb-3">
-    <input id="sName" class="form-control col" placeholder="Nom du service">
-    <input id="sBeds" type="number" class="form-control col" placeholder="Lits">
-    <button class="btn btn-success col">Save</button>
-  </form>
-  <table class="table"><tbody id="servicesTable"></tbody></table>
-</div>
-
 
 <script src="js/app.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/ui.js"></script>
 
 </body>
 </html>
